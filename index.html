@@ -17,20 +17,19 @@
         <span>SCALE <small>DEMO</small></span>
       </a>
       <nav aria-label="Project links">
-        <span class="nav-link muted" title="Paper link will be added after release">Paper · forthcoming</span>
         <a class="nav-link" href="https://github.com/Multimodal-Music-Research-Lab/scale-demo" target="_blank" rel="noreferrer">GitHub ↗</a>
       </nav>
     </header>
 
     <main id="top">
       <section class="intro" aria-labelledby="page-title">
-        <p class="eyebrow">Companion demo for our ICASSP paper</p>
         <h1 id="page-title">SCALE</h1>
         <p class="dek">Structural Context from Audio and Lyric Evidence for Music Structure Analysis.</p>
         <p class="intro-copy">
-          SCALE detects musical section boundaries and assigns section labels such as verse, chorus,
-          bridge, and instrumental. This page lets you listen to selected HX test songs while comparing
-          the model output with the reference structure on a shared timeline.
+          SCALE detects musical section boundaries and classifies each section as intro, verse, chorus,
+          bridge, instrumental, outro, or silence. This page provides synchronized playback for selected
+          SongFormBench-HX test songs and compares SCALE predictions with the ground-truth annotations
+          on a shared timeline.
         </p>
       </section>
 
@@ -41,8 +40,8 @@
             <h2 id="demo-title">Explore the predictions</h2>
           </div>
           <p class="selection-note">
-            Selected from the 200-song HX test set where SCALE outperformed SongFormer on HR.5F,
-            HR3F, and ACC. SongFormer was used only for selection and is not displayed here.
+            These examples come from <a href="https://huggingface.co/datasets/ASLP-lab/SongFormBench" target="_blank" rel="noreferrer">SongFormBench-HX</a>,
+            the 200-song HarmonixSet subset of SongFormBench.
           </p>
         </div>
 
@@ -85,7 +84,7 @@
                 </div>
                 <p class="source-fallback">
                   Audio from <a href="https://huggingface.co/datasets/ASLP-lab/SongFormBench" target="_blank" rel="noreferrer">SongFormBench</a>
-                  (<a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noreferrer">CC BY 4.0</a>).
+                  (<a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noreferrer" title="Creative Commons Attribution 4.0 International">CC BY 4.0</a>).
                   <a id="source-link" href="#" target="_blank" rel="noreferrer">Open WAV ↗</a>
                 </p>
               </section>
@@ -94,7 +93,7 @@
                 <div class="card-heading structure-heading">
                   <div>
                     <p class="card-kicker">Music structure</p>
-                    <h4 id="structure-title">Reference and SCALE prediction</h4>
+                    <h4 id="structure-title">Ground truth and SCALE prediction</h4>
                   </div>
                   <p class="interaction-hint">Click a segment to seek</p>
                 </div>
@@ -108,10 +107,10 @@
 
                 <div class="timeline-row">
                   <div class="row-label">
-                    <strong>Reference</strong>
+                    <strong>Ground truth</strong>
                     <span>HX annotation</span>
                   </div>
-                  <div id="reference-track" class="timeline" role="group" aria-label="Reference structure"></div>
+                  <div id="reference-track" class="timeline" role="group" aria-label="Ground-truth structure"></div>
                 </div>
 
                 <div class="timeline-row">
@@ -136,9 +135,9 @@
         <p class="section-kicker">How to read the demo</p>
         <h2 id="reading-title">One song, two aligned views</h2>
         <div class="note-grid">
-          <p><strong>Reference</strong> shows the HX test annotation. <strong>SCALE</strong> shows the model prediction from the released inference pipeline.</p>
+          <p><strong>Ground truth</strong> shows the HX test annotation. <strong>SCALE</strong> shows the model prediction from the released inference pipeline.</p>
           <p>Pre-chorus is mapped to verse, matching the evaluation protocol. The colored blocks retain every predicted boundary, including adjacent sections with the same label.</p>
-          <p>Audio is streamed from the WAV files released with SongFormBench under CC BY 4.0, so playback and both structure timelines use the same recording.</p>
+          <p>Audio is streamed from the SongFormBench WAV files. Its dataset card specifies the Creative Commons Attribution 4.0 license, and both structure timelines use the same recording.</p>
         </div>
       </section>
     </main>
