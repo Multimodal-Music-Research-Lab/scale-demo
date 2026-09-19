@@ -12,10 +12,9 @@ const LABEL_NAMES = {
 const state = {
   songs: [],
   current: null,
-  player: null,
-  playerReady: false,
-  timer: null,
 };
+
+const AUDIO_BASE_URL = "https://huggingface.co/datasets/ASLP-lab/SongFormBench/resolve/main/data/audios/HarmonixSet/";
 
 const elements = {
   list: document.querySelector("#song-list"),
@@ -34,6 +33,7 @@ const elements = {
   currentTime: document.querySelector("#current-time"),
   tooltip: document.querySelector("#tooltip"),
   sourceLink: document.querySelector("#source-link"),
+  audio: document.querySelector("#audio-player"),
 };
 
 function formatTime(seconds) {
@@ -77,10 +77,9 @@ function hideTooltip() {
 }
 
 function seekTo(seconds) {
-  if (state.playerReady && state.player?.seekTo) {
-    state.player.seekTo(seconds, true);
-    state.player.playVideo();
-  }
+  if (!elements.audio.src) return;
+  elements.audio.currentTime = seconds;
+  elements.audio.play().catch(() => {});
 }
 
 function renderTrack(container, segments, duration) {
@@ -145,13 +144,18 @@ function renderSongList() {
   elements.select.addEventListener("change", () => selectSong(elements.select.value));
 }
 
-function renderSong(song, shouldCue = true) {
+function getAudioUrl(song) {
+  return `${AUDIO_BASE_URL}${encodeURIComponent(song.id)}.wav`;
+}
+
+function renderSong(song) {
   state.current = song;
   elements.id.textContent = song.id;
   elements.title.textContent = song.title;
   elements.artist.textContent = song.artist;
   elements.duration.textContent = formatTime(song.duration) + " source duration";
-  elements.sourceLink.href = "https://www.youtube.com/watch?v=" + song.youtubeId;
+  const audioUrl = getAudioUrl(song);
+  elements.sourceLink.href = audioUrl;
   elements.metricHr05.textContent = song.metrics.hr05f.toFixed(3);
   elements.metricHr3.textContent = song.metrics.hr3f.toFixed(3);
   elements.metricAcc.textContent = song.metrics.acc.toFixed(3);
@@ -166,9 +170,9 @@ function renderSong(song, shouldCue = true) {
   renderTrack(elements.prediction, song.prediction, song.duration);
   updatePlayhead(0);
 
-  if (shouldCue && state.playerReady) {
-    state.player.cueVideoById(song.youtubeId);
-  }
+  elements.audio.pause();
+  elements.audio.src = audioUrl;
+  elements.audio.load();
 
   const url = new URL(window.location.href);
   url.searchParams.set("song", song.id);
@@ -178,7 +182,7 @@ function renderSong(song, shouldCue = true) {
 function selectSong(id) {
   const song = state.songs.find((item) => item.id === id) || state.songs[0];
   if (!song || state.current?.id === song.id) return;
-  renderSong(song, true);
+  renderSong(song);
 }
 
 function updatePlayhead(seconds) {
@@ -190,35 +194,13 @@ function updatePlayhead(seconds) {
   elements.currentTime.textContent = `${formatTime(seconds)} / ${formatTime(state.current.duration)}`;
 }
 
-function startPlaybackTimer() {
-  window.clearInterval(state.timer);
-  state.timer = window.setInterval(() => {
-    if (!state.playerReady || !state.player?.getCurrentTime) return;
-    updatePlayhead(state.player.getCurrentTime());
-  }, 250);
-}
-
-window.onYouTubeIframeAPIReady = function onYouTubeIframeAPIReady() {
-  if (!state.current || !window.YT?.Player) return;
-  state.player = new YT.Player("youtube-player", {
-    host: "https://www.youtube-nocookie.com",
-    videoId: state.current.youtubeId,
-    playerVars: {
-      rel: 0,
-      modestbranding: 1,
-      playsinline: 1,
-    },
-    events: {
-      onReady: () => {
-        state.playerReady = true;
-        startPlaybackTimer();
-      },
-      onStateChange: (event) => {
-        if (event.data === YT.PlayerState.ENDED) updatePlayhead(0);
-      },
-    },
-  });
-};
+elements.audio.addEventListener("timeupdate", () => updatePlayhead(elements.audio.currentTime));
+elements.audio.addEventListener("seeked", () => updatePlayhead(elements.audio.currentTime));
+elements.audio.addEventListener("ended", () => updatePlayhead(0));
+elements.audio.addEventListener("error", () => {
+  if (!state.current) return;
+  elements.currentTime.textContent = "Audio unavailable — open the WAV source";
+});
 
 async function init() {
   renderLegend();
@@ -229,9 +211,7 @@ async function init() {
 
   const requested = new URL(window.location.href).searchParams.get("song");
   const initial = state.songs.find((song) => song.id === requested) || state.songs[0];
-  renderSong(initial, false);
-
-  if (window.YT?.Player) window.onYouTubeIframeAPIReady();
+  renderSong(initial);
 }
 
 init().catch((error) => {
