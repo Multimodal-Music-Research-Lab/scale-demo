@@ -157,7 +157,7 @@ h1 {
   border-bottom: 1px solid var(--line);
 }
 
-.demo-heading h2, .method-note h2 {
+.demo-heading h2 {
   margin-bottom: 0;
   font-family: Georgia, "Times New Roman", serif;
   font-size: clamp(1.9rem, 3.4vw, 3rem);
@@ -476,28 +476,6 @@ h1 {
   background: #fff3b3;
 }
 
-.method-note {
-  margin: 0 0 88px;
-  padding: 34px 0 0;
-  border-top: 1px solid var(--line);
-}
-
-.note-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 42px;
-  margin-top: 28px;
-}
-
-.note-grid p {
-  margin: 0;
-  color: var(--muted);
-  font-size: 0.9rem;
-  line-height: 1.65;
-}
-
-.note-grid strong { color: var(--text); }
-
 footer {
   width: min(1320px, calc(100% - 48px));
   margin: 0 auto;
@@ -558,7 +536,6 @@ footer p { margin: 0; }
   .ruler-wrap, .timeline-row { grid-template-columns: 70px minmax(0, 1fr); gap: 9px; }
   .timeline-footer { margin-left: 79px; }
   .timeline { height: 68px; }
-  .note-grid { grid-template-columns: 1fr; gap: 18px; }
 }
 
 @media (max-width: 520px) {
