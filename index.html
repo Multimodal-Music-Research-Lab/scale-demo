@@ -6,8 +6,7 @@
     <meta name="description" content="Interactive companion demo for SCALE: Structural Context from Audio and Lyric Evidence for Music Structure Analysis." />
     <title>SCALE — Music Structure Analysis Demo</title>
     <link rel="canonical" href="https://multimodal-music-research-lab.github.io/scale-demo/" />
-    <link rel="preconnect" href="https://www.youtube-nocookie.com" />
-    <link rel="preconnect" href="https://www.youtube.com" />
+    <link rel="preconnect" href="https://huggingface.co" />
     <link rel="stylesheet" href="./styles.css" />
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='13' fill='%23070d18'/%3E%3Cpath d='M12 42h10V23H12zm15 0h10V14H27zm15 0h10V29H42z' fill='%236de2bd'/%3E%3C/svg%3E" />
   </head>
@@ -77,14 +76,18 @@
                 <div class="card-heading">
                   <div>
                     <p class="card-kicker">Audio source</p>
-                    <h4 id="audio-title">Listen on YouTube</h4>
+                    <h4 id="audio-title">Listen to the SongFormBench audio</h4>
                   </div>
                   <span class="duration" id="duration">—</span>
                 </div>
                 <div class="player-wrap">
-                  <div id="youtube-player" aria-label="YouTube audio player"></div>
+                  <audio id="audio-player" controls preload="metadata" aria-label="SongFormBench audio player"></audio>
                 </div>
-                <p class="source-fallback">Playback restricted by the source? <a id="source-link" href="#" target="_blank" rel="noreferrer">Open this song on YouTube ↗</a></p>
+                <p class="source-fallback">
+                  Audio from <a href="https://huggingface.co/datasets/ASLP-lab/SongFormBench" target="_blank" rel="noreferrer">SongFormBench</a>
+                  (<a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noreferrer">CC BY 4.0</a>).
+                  <a id="source-link" href="#" target="_blank" rel="noreferrer">Open WAV ↗</a>
+                </p>
               </section>
 
               <section class="structure-card" aria-labelledby="structure-title">
@@ -135,7 +138,7 @@
         <div class="note-grid">
           <p><strong>Reference</strong> shows the HX test annotation. <strong>SCALE</strong> shows the model prediction from the released inference pipeline.</p>
           <p>Pre-chorus is mapped to verse, matching the evaluation protocol. The colored blocks retain every predicted boundary, including adjacent sections with the same label.</p>
-          <p>Audio is played from the dataset’s YouTube source. The demo does not redistribute the underlying copyrighted recordings.</p>
+          <p>Audio is streamed from the WAV files released with SongFormBench under CC BY 4.0, so playback and both structure timelines use the same recording.</p>
         </div>
       </section>
     </main>
@@ -147,6 +150,5 @@
 
     <div id="tooltip" class="tooltip" role="tooltip" hidden></div>
     <script src="./app.js"></script>
-    <script src="https://www.youtube.com/iframe_api"></script>
   </body>
 </html>
